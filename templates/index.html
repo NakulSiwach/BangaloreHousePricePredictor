@@ -10,8 +10,86 @@
 
     <title>House Price Predictor</title>
   </head>
-  <body>
+  <body class="bg-dark" >
+    <div class="container" >
+      <div class="row" >
+        <div class="card"  style="width:100%;height:100%;margin-top:50px">
+          <div class="card_header" style="text-align:center"  >
+            <h1> Welcome to House Price Predictor </h1>
+          </div>
+          <div class="card-body" >
+            <form method="post" accept-charset="UTF-8">
+              <div class="row" >
+                <div class="col-md-6 form-group" style="text_align:center">
+                  <label><b>Select the Location: </b></label>
+                  <select class="selectpicker form-control" id="location" name ="location" required="1" >
+                    {% for location in locations %}
+                      <option value="{{location}}" >{{ location }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
 
+                <div class="col-md-6 form-group" style="text_align:center">
+                  <label><b>Select the BHK: </b></label>
+                  <input type="text" class="form-control" name="BHK" id="BHK" placeholder="Enter BHK">
+                </div>
+
+                <div class="col-md-6 form-group" style="text_align:center">
+                  <label><b>Select the Bathrooms : </b></label>
+                  <input type="text" class="form-control" name="bath" id="bath" placeholder="Enter bath">
+                </div>
+
+
+                <div class="col-md-6 form-group" style="text_align:center">
+                  <label><b>Select the sqft: </b></label>
+                  <input type="text" class="form-control" name="total_sqft" id="total_sqft" placeholder="Enter sqft">
+                </div>
+
+                <div class="col-md-12 form-group" style="" >
+                  <button class="btn btn-primary form-control" onclick="send_data()" >Predict Price</button>
+
+                </div>
+
+              </div>
+            </form>
+            <br>
+            <div class="col-md-12" style="text-align : center">
+              <h3><span id="prediction">  </span></h3>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+
+      function form_handler(event){
+        event.preventDefault();
+      }
+
+      function send_data(){
+        document.querySelector('form').addEventListener("submit",form_handler);
+        var fd = new FormData(document.querySelector('form'));
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST','/predict',true);
+        document.getElementById("prediction").innerHTML = "waiting....";
+
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState == XMLHttpRequest.DONE){
+            document.getElementById('prediction').innerHTML = "Prediction is : " + xhr.responseText;
+
+          }
+        }
+
+        xhr.onload = function(){};
+        xhr.send(fd);
+      }
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
